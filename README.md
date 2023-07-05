@@ -52,3 +52,8 @@ The WebUI uses the Open AI Whisper model
 
 `.en` models are for English only, and the cool thing is that you can use the `Translate to English` option from the "large" models!
 
+
+```shell
+docker run --gpus all -itd -p 17860:7860 --name  openai-whisper whisper-webui:0.0.3
+```
+docker save -o whisper-large:0.04.tar whisper-webui:0.0.4

@@ -136,4 +136,4 @@ with block:
 if args.share:
     block.launch(share=True)
 else:
-    block.launch()
+    block.launch(server_name="0.0.0.0")
