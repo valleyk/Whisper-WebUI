@@ -5,7 +5,6 @@ from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
 import os
 from datetime import datetime
-import torch
 
 DEFAULT_MODEL_SIZE = "large-v2"
 
@@ -71,7 +70,6 @@ class WhisperInference(BaseInterface):
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
                 total_result += f'{subtitle}'
-            torch.cuda.empty_cache()
             return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
         except Exception as e:
             return f"Error: {str(e)}"
@@ -167,7 +165,6 @@ class WhisperInference(BaseInterface):
             elif subformat == "WebVTT":
                 subtitle = get_vtt(result["segments"])
                 write_file(subtitle, f"{output_path}.vtt")
-            torch.cuda.empty_cache()
             return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
             return f"Error: {str(e)}"
