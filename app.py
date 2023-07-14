@@ -27,6 +27,7 @@ def on_change_models(model_size):
     else:
         return gr.Checkbox.update(visible=True, value=False, label="Translate to English?", interactive=True)
 
+
 whisper_inf = WhisperInference()
 nllb_inf = NLLBInference()
 block = gr.Blocks(css=CSS).queue(api_open=False)
@@ -41,6 +42,7 @@ with block:
                 input_file = gr.Files(type="file", label="Upload File here")
             with gr.Row():
                 dd_model = gr.Dropdown(choices=whisper_inf.available_models, value="large-v2", label="Model")
+                # dd_model = gr.Dropdown(choices=whisper_inf.available_models, value="medium", label="Model")
                 dd_lang = gr.Dropdown(choices=["Automatic Detection"] + whisper_inf.available_langs,
                                       value="Automatic Detection", label="Language")
                 dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
@@ -132,8 +134,7 @@ with block:
                           outputs=[tb_indicator])
             btn_openfolder.click(fn=lambda: open_folder("outputs\\translations"), inputs=None, outputs=None)
 
-
 if args.share:
     block.launch(share=True)
 else:
-    block.launch(server_name="0.0.0.0")
+    block.launch(server_name="0.0.0.0", show_error=True, enable_queue=True, server_port=7860)
