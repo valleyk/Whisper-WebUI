@@ -75,8 +75,10 @@ class WhisperInference(BaseInterface):
         except Exception as e:
             return f"Error: {str(e)}"
         finally:
+            self.model = None
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])
+
 
     def transcribe_youtube(self, youtubelink,
                            model_size, lang, subformat, istranslate,

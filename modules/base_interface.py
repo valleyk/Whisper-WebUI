@@ -1,3 +1,4 @@
+import gc
 import os
 import torch
 from typing import List
@@ -11,8 +12,9 @@ class BaseInterface:
     def release_cuda_memory():
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
-            torch.cuda.reset_max_memory_allocated()
+            # torch.cuda.reset_max_memory_allocated()
             torch.cuda.ipc_collect()
+            gc.collect()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):

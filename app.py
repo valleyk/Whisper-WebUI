@@ -137,4 +137,4 @@ with block:
 if args.share:
     block.launch(share=True)
 else:
-    block.launch(server_name="0.0.0.0", show_error=True, enable_queue=True, server_port=7860)
+    block.launch(server_name="0.0.0.0", show_error=True, enable_queue=True)
