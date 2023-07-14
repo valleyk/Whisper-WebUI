@@ -5,6 +5,7 @@ from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
 import os
 from datetime import datetime
+import torch
 
 DEFAULT_MODEL_SIZE = "large-v2"
 
@@ -43,10 +44,10 @@ class WhisperInference(BaseInterface):
                 translatable_model = ["large", "large-v1", "large-v2"]
                 if istranslate and self.current_model_size in translatable_model:
                     result = self.model.transcribe(audio=audio, language=lang, verbose=False, task="translate",
-                                                   progress_callback=progress_callback)
+                                                   progress_callback=progress_callback,initial_prompt="中文使用简体中文")
                 else:
                     result = self.model.transcribe(audio=audio, language=lang, verbose=False,
-                                                   progress_callback=progress_callback)
+                                                   progress_callback=progress_callback,initial_prompt="中文使用简体中文")
 
                 progress(1, desc="Completed!")
 
@@ -70,7 +71,7 @@ class WhisperInference(BaseInterface):
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
                 total_result += f'{subtitle}'
-
+            torch.cuda.empty_cache()
             return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
         except Exception as e:
             return f"Error: {str(e)}"
@@ -149,10 +150,11 @@ class WhisperInference(BaseInterface):
             translatable_model = ["large", "large-v1", "large-v2"]
             if istranslate and self.current_model_size in translatable_model:
                 result = self.model.transcribe(audio=micaudio, language=lang, verbose=False, task="translate",
-                                               progress_callback=progress_callback)
+                                               progress_callback=progress_callback,initial_prompt="中文使用简体中文")
             else:
                 result = self.model.transcribe(audio=micaudio, language=lang, verbose=False,
-                                               progress_callback=progress_callback)
+                                               progress_callback=progress_callback,initial_prompt="中文使用简体中文")
+
 
             progress(1, desc="Completed!")
 
@@ -165,7 +167,7 @@ class WhisperInference(BaseInterface):
             elif subformat == "WebVTT":
                 subtitle = get_vtt(result["segments"])
                 write_file(subtitle, f"{output_path}.vtt")
-
+            torch.cuda.empty_cache()
             return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
             return f"Error: {str(e)}"
