@@ -1,6 +1,6 @@
 import whisper
 from .base_interface import BaseInterface
-from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
+from modules.subtitle_manager import get_srt, get_vtt,get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
 import os
@@ -36,6 +36,8 @@ class WhisperInference(BaseInterface):
             progress(0, desc="Loading Audio..")
 
             files_info = {}
+            if not isinstance(fileobjs, list):
+                fileobjs = [fileobjs]
             for fileobj in fileobjs:
 
                 audio = whisper.load_audio(fileobj.name)
@@ -59,6 +61,11 @@ class WhisperInference(BaseInterface):
                 if subformat == "SRT":
                     subtitle = get_srt(result["segments"])
                     write_file(subtitle, f"{output_path}.srt")
+                elif subformat == "TXT":
+                    subtitle = get_txt(result["segments"])
+                    write_file(subtitle, f"{output_path}.txt")
+                elif subformat =="JSON":
+                    return result
                 elif subformat == "WebVTT":
                     subtitle = get_vtt(result["segments"])
                     write_file(subtitle, f"{output_path}.vtt")
@@ -71,7 +78,8 @@ class WhisperInference(BaseInterface):
                 total_result += f'{file_name}\n\n'
                 total_result += f'{subtitle}'
 
-            return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
+            # return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
+            return f"{total_result}"
         except Exception as e:
             return f"Error: {str(e)}"
         finally:
@@ -159,6 +167,7 @@ class WhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             timestamp = datetime.now().strftime("%m%d%H%M%S")
+            file_name= ""
             output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
 
             if subformat == "SRT":

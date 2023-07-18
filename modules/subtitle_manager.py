@@ -30,6 +30,11 @@ def get_srt(segments):
         output += f"{segment['text']}\n\n"
     return output
 
+def get_txt(segments):
+    output = ""
+    for i, segment in enumerate(segments):
+        output += f"{segment['text']}\n\n"
+    return output
 
 def get_vtt(segments):
     output = "WebVTT\n\n"
