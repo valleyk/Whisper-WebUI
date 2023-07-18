@@ -54,7 +54,7 @@ with block:
                 tb_indicator = gr.Textbox(label="Output")
                 btn_openfolder = gr.Button('📂').style(full_width=False)
 
-            btn_run.click(fn=whisper_inf.transcribe_file,
+            btn_run.click(fn=whisper_inf.transcribe_file,api_name="/transcribe_file",
                           inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
             btn_openfolder.click(fn=lambda: open_folder("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
